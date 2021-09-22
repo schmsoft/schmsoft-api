@@ -5,3 +5,5 @@ Django==3.2.7
 django_model_utils==4.1.1
 django_address==0.2.5
 django_money==2.0.3
+graphene==2.1.9
+graphene_django==2.15.0
