@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 from django.utils import tree
 
@@ -5,6 +6,7 @@ from infrastructure import model_utils
 from model_utils.models import TimeStampedModel, SoftDeletableModel
 from address.models import Address
 from djmoney.models.fields import MoneyField
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Business(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
@@ -63,6 +65,7 @@ class Owner(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
         default=IdentificationMethods.NATIONAL_ID,
     )
     identification_number = models.CharField(max_length=32)
+    phone_number = PhoneNumberField(blank=False, unique=True)
     total_monthly_income = MoneyField(
         max_digits=19, decimal_places=4, null=True, default_currency="KES", default=0
     )
