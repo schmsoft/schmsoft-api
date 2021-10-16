@@ -13,4 +13,4 @@ class OwnerQuery(graphene.ObjectType):
     business_owners = graphene.List(OwnerType)
 
     def resolve_business_owners(self, info):
-        return client_models.Owner.objects.alL()
+        return client_models.Owner.objects.all()

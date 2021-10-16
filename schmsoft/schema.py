@@ -7,6 +7,7 @@ from infrastructure.schema import (
 from client.schema import (
     business as client_schema_business,
     owner as client_schema_owner,
+    loan_portfolio as client_loan_portfolio,
 )
 
 
@@ -14,12 +15,15 @@ class Query(
     infrastructure_schema_user.UserQuery,
     client_schema_business.BusinessQuery,
     client_schema_owner.OwnerQuery,
-    graphene.ObjectType,
+    client_loan_portfolio.LoanPortfolioQuery,
 ):
     pass
 
 
-class Mutation(infrastructure_schema_auth.AuthMutation, graphene.ObjectType):
+class Mutation(
+    infrastructure_schema_auth.AuthMutation,
+    client_loan_portfolio.LoanPortfolioMutation,
+):
     pass
 
 

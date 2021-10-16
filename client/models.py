@@ -1,5 +1,6 @@
 from enum import unique
 from django.db import models
+from django.db.models.enums import TextChoices
 from django.utils import tree
 
 from infrastructure import model_utils
@@ -76,3 +77,16 @@ class Owner(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
     )
     passport_photo = models.FileField(blank=True)
     registration_fee = models.OneToOneField("billing.Payment", on_delete=models.PROTECT)
+
+
+class LoanPortfolio(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
+    class Status(TextChoices):
+        ACTIVE = "ACTIVE"
+        CLOSED = "CLOSED"
+
+    name = models.CharField(max_length=32, unique=True, blank=False, null=False)
+    description = models.TextField(blank=True)
+    status = models.CharField(
+        max_length=16, choices=Status.choices, default=Status.ACTIVE
+    )
+    owners = models.ManyToManyField("auth.User", blank=True)
