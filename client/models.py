@@ -76,7 +76,6 @@ class Owner(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
         max_length=16, blank=True, choices=MaritalStatus.choices
     )
     passport_photo = models.FileField(blank=True)
-    registration_fee = models.OneToOneField("billing.Payment", on_delete=models.PROTECT)
 
 
 class LoanPortfolio(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):

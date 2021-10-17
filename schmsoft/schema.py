@@ -17,14 +17,15 @@ class Query(
     client_schema_owner.OwnerQuery,
     client_loan_portfolio.LoanPortfolioQuery,
 ):
-    pass
+    ...
 
 
 class Mutation(
     infrastructure_schema_auth.AuthMutation,
     client_loan_portfolio.LoanPortfolioMutation,
+    client_schema_business.BusinessMutation,
 ):
-    pass
+    ...
 
 
 SCHEMA = graphene.Schema(query=Query, mutation=Mutation)
