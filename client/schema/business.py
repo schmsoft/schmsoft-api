@@ -1,5 +1,3 @@
-from inspect import Arguments
-from os import name
 import graphene
 from graphene_django import DjangoObjectType
 from graphql_jwt.decorators import login_required
@@ -76,6 +74,7 @@ class AddBusinessMutation(graphene.Mutation):
 
     business = graphene.Field(BusinessType)
 
+    @login_required
     def mutate(self, info, business, owner):
         business = client_models.Business.objects.create(**business)
         user = user_api_create.create_user_without_password(username=owner.phone_number)

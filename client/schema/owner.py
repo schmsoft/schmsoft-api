@@ -14,16 +14,16 @@ class OwnerType(DjangoObjectType):
 
 
 class OwnerInput(graphene.InputObjectType):
-    role_definition = graphene.String(required=False)
-    business_id = (graphene.ID(required=True),)
+    role_definition = graphene.String()
+    business_id = graphene.ID()
     identification_method = graphene.String(required=True)
-    identification_number = graphene.String(require=True)
+    identification_number = graphene.String(required=True)
     phone_number = graphene.String(required=True)
     total_monthly_income = graphene.Decimal()
     number_of_dependants = graphene.Int()
-    gender = graphene.String()
+    gender = graphene.String(required=True)
     marital_status = graphene.String()
-    passport_photo = Upload(required=False)
+    passport_photo = Upload()
 
 
 class OwnerQuery(graphene.ObjectType):

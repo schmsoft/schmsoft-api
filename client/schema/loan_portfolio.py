@@ -5,8 +5,6 @@ from graphql_jwt.decorators import login_required
 
 from client import models as client_models
 
-from .owner import OwnerType
-
 
 class LoanPortfolioType(DjangoObjectType):
     class Meta:
@@ -36,16 +34,33 @@ class LoanPortfolioQuery(graphene.ObjectType):
         return client_models.LoanPortfolio.objects.get(id=id)
 
 
-class CreateLoanPortlioMutation(graphene.Mutation):
+class AddLoanPortlioMutation(graphene.Mutation):
     class Arguments:
         portfolio = LoanPortfolioInput(required=True)
 
     portfolio = graphene.Field(LoanPortfolioType)
 
     def mutate(self, info, portfolio):
-        p = client_models.LoanPortfolio.objects.create(**portfolio)
-        return CreateLoanPortlioMutation(portfolio=p)
+        loan_portfolio = client_models.LoanPortfolio.objects.create(**portfolio)
+        return AddLoanPortlioMutation(portfolio=loan_portfolio)
+
+
+class UpdateLoanPortfolioMutation(graphene.Mutation):
+    class Arguments:
+        portfolio_id = graphene.ID(required=True)
+        portfolio = LoanPortfolioInput(required=True)
+
+    portfolio = graphene.Field(LoanPortfolioType)
+
+    @login_required
+    def mutate(self, info, portfolio_id, portfolio):
+        loan_portfolio = client_models.LoanPortfolio.objects.get(id=portfolio_id)
+
+        client_models.LoanPortfolio.objects.filter(id=portfolio_id).update(**portfolio)
+
+        return UpdateLoanPortfolioMutation(portfolio=loan_portfolio)
 
 
 class LoanPortfolioMutation(graphene.ObjectType):
-    create_loan_portfolio = CreateLoanPortlioMutation.Field()
+    add_loan_portfolio = AddLoanPortlioMutation.Field()
+    update_loan_portfolio = UpdateLoanPortfolioMutation.Field()
