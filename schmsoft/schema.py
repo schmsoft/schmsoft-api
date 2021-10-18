@@ -1,9 +1,7 @@
 import graphene
 
-from infrastructure.schema import (
-    auth as infrastructure_schema_auth,
-    user as infrastructure_schema_user,
-)
+
+from user.schema import user as user_schema_user, auth as user_schema_auth
 from client.schema import (
     business as client_schema_business,
     owner as client_schema_owner,
@@ -12,7 +10,7 @@ from client.schema import (
 
 
 class Query(
-    infrastructure_schema_user.UserQuery,
+    user_schema_user.UserQuery,
     client_schema_business.BusinessQuery,
     client_schema_owner.OwnerQuery,
     client_loan_portfolio.LoanPortfolioQuery,
@@ -21,7 +19,7 @@ class Query(
 
 
 class Mutation(
-    infrastructure_schema_auth.AuthMutation,
+    user_schema_auth.AuthMutation,
     client_loan_portfolio.LoanPortfolioMutation,
     client_schema_business.BusinessMutation,
 ):
