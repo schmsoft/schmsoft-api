@@ -76,8 +76,10 @@ class AddBusinessMutation(graphene.Mutation):
 
     @login_required
     def mutate(self, info, business, owner):
-        business = client_models.Business.objects.create(**business)
         user = user_api_create.create_user_without_password(username=owner.phone_number)
+
+        business = client_models.Business.objects.create(**business)
+
         owner = client_api_owner.update_or_create_owner(
             owner_input=owner, business_id=business.id, user=user
         )

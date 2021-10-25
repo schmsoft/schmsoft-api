@@ -1,7 +1,6 @@
 from enum import unique
 from django.db import models
 from django.db.models.enums import TextChoices
-from django.utils import tree
 
 from infrastructure import model_utils
 from model_utils.models import TimeStampedModel, SoftDeletableModel
@@ -12,15 +11,15 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Business(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
     class Types(models.TextChoices):
-        SOLE_PROPRIETORSHIP = "SOLE_PROPRIETORSHIP"
-        PARTNERSHIP = "PARTNERSHIP"
-        LIMITED_LIABILITY_PARTNERSHIP = "LIMITED_LIABILITY_PARTNERSHIP"
-        LIMITED_LIABILITY_COMPANY = "LIMITED_LIABILITY_COMPANY"
-        SOCIETY = "SOCIETY"
+        SOLE_PROPRIETORSHIP = "Sole Proprietorship"
+        PARTNERSHIP = "Partnership"
+        LIMITED_LIABILITY_PARTNERSHIP = "Limited Liability Partnership"
+        LIMITED_LIABILITY_COMPANY = "Limited Liability Company"
+        SOCIETY = "Society"
 
     class Status(models.TextChoices):
-        ACTIVE = "ACTIVE"
-        SUSPENDED = "SUSPENDED"
+        ACTIVE = "Active"
+        SUSPENDED = "Suspended"
 
     name = models.CharField(max_length=256)
     description = models.TextField(blank=True)
@@ -42,20 +41,20 @@ class Business(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
 
 class Owner(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
     class IdentificationMethods(models.TextChoices):
-        NATIONAL_ID = "NATIONAL_ID"
-        PASSPORT = "PASSPORT"
-        DRIVER_LICENSE = "DRIVER_LICENSE"
+        NATIONAL_ID = "National ID"
+        PASSPORT = "Passoport"
+        DRIVER_LICENSE = "Driver's License"
 
     class Gender(models.TextChoices):
-        FEMALE = "FEMALE"
-        MALE = "MALE"
-        OTHER = "OTHER"
+        FEMALE = "Female"
+        MALE = "Male"
+        OTHER = "Other"
 
     class MaritalStatus(models.TextChoices):
-        SINGLE = "SINGLE"
-        MARRIED = "MARRIED"
-        WIDOWED = "WIDOWED"
-        DIVORCED = "DIVORCED"
+        SINGLE = "Single"
+        MARRIED = "Married"
+        WIDOWED = "Widowed"
+        DIVORCED = "Divorced"
 
     role_definition = models.CharField(max_length=64, blank=True)
     user = models.OneToOneField("auth.User", on_delete=models.PROTECT)
@@ -65,7 +64,7 @@ class Owner(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
         choices=IdentificationMethods.choices,
         default=IdentificationMethods.NATIONAL_ID,
     )
-    identification_number = models.CharField(max_length=32)
+    identification_number = models.CharField(max_length=32, unique=True, blank=False)
     phone_number = PhoneNumberField(blank=False, unique=True)
     total_monthly_income = MoneyField(
         max_digits=19, decimal_places=4, null=True, default_currency="KES", default=0
@@ -80,8 +79,8 @@ class Owner(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
 
 class LoanPortfolio(TimeStampedModel, SoftDeletableModel, model_utils.SchmsoftModel):
     class Status(TextChoices):
-        ACTIVE = "ACTIVE"
-        CLOSED = "CLOSED"
+        ACTIVE = "Active"
+        CLOSED = "Closed"
 
     name = models.CharField(max_length=32, unique=True, blank=False, null=False)
     description = models.TextField(blank=True)

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "client",
     "infrastructure",
     "billing",
+    "contact",
 ]
 
 MIDDLEWARE = [

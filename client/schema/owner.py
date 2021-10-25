@@ -9,6 +9,12 @@ from client.api import owner as client_api_owner
 
 
 class OwnerType(DjangoObjectType):
+    gender = graphene.Field(graphene.String, source="gender")
+    marital_status = graphene.Field(graphene.String, source="marital_status")
+    total_monthly_income = graphene.Field(
+        graphene.String, source="total_monthly_income"
+    )
+
     class Meta:
         model = client_models.Owner
 
