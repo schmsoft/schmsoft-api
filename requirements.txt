@@ -44,3 +44,4 @@ toml==0.10.2
 tomli==1.2.1
 typing-extensions==3.10.0.2
 wrapt==1.12.1
+gunicorn
