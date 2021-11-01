@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.urls.conf import include
+from django.urls.conf import include, re_path
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.base import RedirectView
 
 from infrastructure import views as infrastructure_views
 
 
 urlpatterns = [
+    re_path(r"^$", RedirectView.as_view(url="admin/")),
     path("grappelli/", include("grappelli.urls")),  # grappelli URLS
     path("admin/", admin.site.urls),
     path(
