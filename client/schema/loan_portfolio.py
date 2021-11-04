@@ -1,7 +1,8 @@
 import graphene
 from graphene_django import DjangoObjectType
+from django.contrib.auth import models as auth_models
 
-from graphql_jwt.decorators import login_required
+from graphql_jwt.decorators import login_required, superuser_required
 
 from client import models as client_models
 
@@ -13,7 +14,7 @@ class LoanPortfolioType(DjangoObjectType):
 
 class LoanPortfolioInput(graphene.InputObjectType):
     name = graphene.String(required=True)
-    description = graphene.String(required=False)
+    description = graphene.String(required=True)
 
 
 class LoanPortfolioQuery(graphene.ObjectType):
@@ -48,7 +49,7 @@ class AddLoanPortlioMutation(graphene.Mutation):
 class UpdateLoanPortfolioMutation(graphene.Mutation):
     class Arguments:
         portfolio_id = graphene.ID(required=True)
-        portfolio = LoanPortfolioInput(required=True)
+        portfolio = LoanPortfolioInput()
 
     portfolio = graphene.Field(LoanPortfolioType)
 
@@ -61,6 +62,50 @@ class UpdateLoanPortfolioMutation(graphene.Mutation):
         return UpdateLoanPortfolioMutation(portfolio=loan_portfolio)
 
 
+class AssignPortfolioManagerMutation(graphene.Mutation):
+    class Arguments:
+        portfolio_id = graphene.ID(required=True)
+        user_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @login_required
+    @superuser_required
+    def mutate(self, info, portfolio_id, user_id):
+        portfolio = client_models.LoanPortfolio.objects.filter(id=portfolio_id).first()
+
+        if portfolio is None:
+            raise Exception("Invalid loan portfolio")
+
+        owner = auth_models.User.objects.get(id=user_id)
+        portfolio.owners.add(owner)
+
+        return AssignPortfolioManagerMutation(success=True)
+
+
+class UnAssignPortfolioManagerMutation(graphene.Mutation):
+    class Arguments:
+        portfolio_id = graphene.ID(required=True)
+        user_id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @login_required
+    @superuser_required
+    def mutate(self, info, portolio_id, user_id):
+        portfolio = client_models.LoanPortfolio.objects.filter(id=portolio_id).first()
+
+        if portfolio is None:
+            raise Exception("Invalid loan portfolio")
+
+        owner = auth_models.User.objects.get(id=user_id)
+        portfolio.owners.remove(owner)
+
+        return UnAssignPortfolioManagerMutation(success=True)
+
+
 class LoanPortfolioMutation(graphene.ObjectType):
     add_loan_portfolio = AddLoanPortlioMutation.Field()
     update_loan_portfolio = UpdateLoanPortfolioMutation.Field()
+    assign_portfolio_manager = AssignPortfolioManagerMutation.Field()
+    un_assign_portfolio_manager = UnAssignPortfolioManagerMutation.Field()
