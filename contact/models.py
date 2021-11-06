@@ -5,9 +5,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class ContactRecord(TimeStampedModel, models.Model):
     class Mechanisms(models.TextChoices):
-        SMS = "SMS"
-        EMAIL = "EMAIL"
-        SLACK = "SLACK"
+        SMS = "SMS", "Text Message (SMS)"
+        EMAIL = "EMAIL", "Email"
+        SLACK = "SLACK", "Slack"
 
     sent_by = models.ForeignKey(
         "auth.User",
