@@ -1,12 +1,12 @@
 import graphene
 
-
 from user.schema import user as user_schema_user, auth as user_schema_auth
 from client.schema import (
     business as client_schema_business,
     owner as client_schema_owner,
     loan_portfolio as client_loan_portfolio,
 )
+from contact.schema import contact_record as contact_schema_contact_record
 
 
 class Query(
@@ -14,6 +14,7 @@ class Query(
     client_schema_business.BusinessQuery,
     client_schema_owner.OwnerQuery,
     client_loan_portfolio.LoanPortfolioQuery,
+    contact_schema_contact_record.ContactRecordQuery,
 ):
     ...
 
