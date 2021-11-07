@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "infrastructure",
     "billing",
     "contact",
+    "integrations",
 ]
 
 MIDDLEWARE = [
@@ -170,3 +171,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# SLACK
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
+SLACK_NOTIFICATIONS_CHANNEL = os.environ.get(
+    "SLACK_NOTIFICATIONS_CHANNEL", "transactions"
+)
