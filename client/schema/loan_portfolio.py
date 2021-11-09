@@ -104,8 +104,30 @@ class UnAssignPortfolioManagerMutation(graphene.Mutation):
         return UnAssignPortfolioManagerMutation(success=True)
 
 
+class UpdatePortfolioManagers(graphene.Mutation):
+    class Arguments:
+        portfolio_id = graphene.ID(required=True)
+        user_ids = graphene.List(graphene.ID, required=True)
+
+    success = graphene.Boolean()
+
+    @login_required
+    @superuser_required
+    def mutate(self, info, portfolio_id, user_ids):
+        portfolio = client_models.LoanPortfolio.objects.get(id=portfolio_id)
+        if portfolio is None:
+            raise Exception("Invalid portfolio")
+
+        owners = auth_models.User.objects.filter(id__in=user_ids)
+        portfolio.owners.clear()
+        portfolio.owners.set(owners)
+
+        return UpdatePortfolioManagers(success=True)
+
+
 class LoanPortfolioMutation(graphene.ObjectType):
     add_loan_portfolio = AddLoanPortlioMutation.Field()
     update_loan_portfolio = UpdateLoanPortfolioMutation.Field()
     assign_portfolio_manager = AssignPortfolioManagerMutation.Field()
     un_assign_portfolio_manager = UnAssignPortfolioManagerMutation.Field()
+    update_portfolio_managers = UpdatePortfolioManagers.Field()

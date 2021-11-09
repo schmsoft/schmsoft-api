@@ -17,4 +17,4 @@ RUN ./manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-ENV DJANGO_SETTINGS_MODULE 'schmsoft.settings.prod'
+# ENV DJANGO_SETTINGS_MODULE 'schmsoft.settings.prod'
