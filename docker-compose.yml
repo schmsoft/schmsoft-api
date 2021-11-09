@@ -13,7 +13,7 @@ services:
       - db
     links:
       - db
-    container_name: web
+    container_name: schmsoft-web
   db:
     image: postgres
     volumes:
@@ -26,6 +26,6 @@ services:
       - POSTGRES_PORT=$POSTGRES_PORT
       - SLACK_NOTIFICATIONS_CHANNEL=$SLACK_NOTIFICATIONS_CHANNEL
       - SLACK_BOT_TOKEN=$SLACK_BOT_TOKEN
-    container_name: db
+    container_name: schmsoft-db
 volumes:
   database:
