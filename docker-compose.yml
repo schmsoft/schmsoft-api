@@ -1,5 +1,6 @@
 version: "3.9"
-
+volumes:
+  - ipython_data_local: {}
 services:
   web:
     build: .
@@ -12,15 +13,20 @@ services:
       - db
     links:
       - db
-    container_name: web
+    container_name: schmsoft-web
   db:
     image: postgres
     volumes:
       - ./database:/var/lib/postgresql/data
+      - ./ipython_data_local:/root/.ipython/profile_default
     environment:
       - POSTGRES_DB=$POSTGRES_DB
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
-    container_name: db
+      - POSTGRES_PORT=$POSTGRES_PORT
+      - SLACK_NOTIFICATIONS_CHANNEL=$SLACK_NOTIFICATIONS_CHANNEL
+      - SLACK_BOT_TOKEN=$SLACK_BOT_TOKEN
+      - DEBUG=$DEBUG
+    container_name: schmsoft-db
 volumes:
   database:
