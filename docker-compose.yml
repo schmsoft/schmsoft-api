@@ -26,6 +26,7 @@ services:
       - POSTGRES_PORT=$POSTGRES_PORT
       - SLACK_NOTIFICATIONS_CHANNEL=$SLACK_NOTIFICATIONS_CHANNEL
       - SLACK_BOT_TOKEN=$SLACK_BOT_TOKEN
+      - DEBUG=$DEBUG
     container_name: schmsoft-db
 volumes:
   database:
