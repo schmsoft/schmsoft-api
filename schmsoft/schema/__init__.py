@@ -1,6 +1,6 @@
 import graphene
 
-from user.schema import user as user_schema_user, auth as user_schema_auth
+from user.schema import user as user_schema_user
 from client.schema import (
     business as client_schema_business,
     owner as client_schema_owner,
@@ -20,7 +20,6 @@ class Query(
 
 
 class Mutation(
-    user_schema_auth.AuthMutation,
     client_loan_portfolio.LoanPortfolioMutation,
     client_schema_business.BusinessMutation,
 ):

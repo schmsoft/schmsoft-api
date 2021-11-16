@@ -21,12 +21,29 @@ from django.views.generic.base import RedirectView
 
 from infrastructure import views as infrastructure_views
 
+from django.conf import settings
+
+from schmsoft.schema import public as schmsoft_schema_public
+
 
 urlpatterns = [
     re_path(r"^$", RedirectView.as_view(url="admin/")),
     path("grappelli/", include("grappelli.urls")),  # grappelli URLS
     path("admin/", admin.site.urls),
     path(
-        "graphql", csrf_exempt(infrastructure_views.GraphQLView.as_view(graphiql=True))
+        "graphql",
+        csrf_exempt(
+            infrastructure_views.LoginRequiredSchmsoftGraphQLView.as_view(
+                graphiql=settings.DEBUG
+            )
+        ),
+    ),
+    path(
+        "graphql-public",
+        csrf_exempt(
+            infrastructure_views.SchmsoftGraphQLView.as_view(
+                graphiql=settings.DEBUG, schema=schmsoft_schema_public.PUBLIC_SCHEMA
+            )
+        ),
     ),
 ]
