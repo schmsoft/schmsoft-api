@@ -45,7 +45,6 @@ class AddOwnerMutation(graphene.Mutation):
 
     owner = graphene.Field(OwnerType)
 
-    @login_required
     def mutate(self, info, owner):
         owner = client_api_owner.update_or_create_owner(owner)
 
@@ -59,7 +58,6 @@ class UploadOwnerPhotoMutation(graphene.Mutation):
 
     passport_photo_link = graphene.String()
 
-    @login_required
     def mutate(self, info, owner_id, passport_photo):
         owner = client_models.Owner.objects.get(id=owner_id)
         client_api_owner.update_owner_passport_photo(

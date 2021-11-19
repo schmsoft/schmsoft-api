@@ -1,14 +1,22 @@
-from graphene_django.views import GraphQLView as BaseGraphQLView
+from graphene_file_upload.django import FileUploadGraphQLView
+from django.core.exceptions import PermissionDenied
+from infrastructure import exceptions as infrastructure_exceptions
+from .mixins import AuthTokenRequiredMixed
 
 
-class GraphQLView(BaseGraphQLView):
+class SchmsoftGraphQLView(FileUploadGraphQLView):
     @staticmethod
     def format_error(error):
-        formatted_error = super(GraphQLView, GraphQLView).format_error(error)
+        formatted = FileUploadGraphQLView.format_error(error)
 
-        try:
-            formatted_error["context"] = error.original_error.context
-        except AttributeError:
-            pass
+        original_error = getattr(error, "original_error", None)
+        if original_error and isinstance(
+            original_error, infrastructure_exceptions.CodedExceptionMixin
+        ):
+            formatted["message"] = getattr(original_error, "EXCEPTION_CODE", None)
+        return formatted
 
-        return formatted_error
+
+class LoginRequiredSchmsoftGraphQLView(AuthTokenRequiredMixed, SchmsoftGraphQLView):
+    def handle_no_permission(self):
+        raise PermissionDenied
