@@ -14,6 +14,5 @@ class ContactRecordType(DjangoObjectType):
 class ContactRecordQuery(graphene.ObjectType):
     contact_records = graphene.List(ContactRecordType)
 
-    @login_required
     def resolve_contact_records(self, info):
         return list(contact_models.ContactRecord.objects.all())

@@ -68,11 +68,9 @@ class BusinessQuery(graphene.ObjectType):
     businesses = graphene.List(BusinessType)
     business = graphene.Field(BusinessType, id=graphene.ID(required=True))
 
-    @login_required
     def resolve_businesses(self, info):
         return client_models.Business.objects.all()
 
-    @login_required
     def resolve_business(self, info, id):
         return client_models.Business.objects.get(id=id)
 
@@ -85,7 +83,7 @@ class AddBusinessMutation(graphene.Mutation):
 
     businessOwner = graphene.Field(client_schema_owner.OwnerType)
 
-    @login_required
+    
     def mutate(self, info, business, owner, user):
         user = user_api_create.create_user_without_password(
             username=owner.phone_number,

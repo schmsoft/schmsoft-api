@@ -30,14 +30,11 @@ class UserQuery(graphene.ObjectType):
     users = graphene.List(UserType)
     staff_users = graphene.List(UserType)
 
-    @login_required
     def resolve_me(self, info):
         return info.context.user
 
-    @login_required
     def resolve_users(self, info):
         return auth_models.User.objects.all()
 
-    @login_required
     def resolve_staff_users(self, info):
         return list(user_api_list.list_staff_users())

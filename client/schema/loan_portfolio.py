@@ -23,14 +23,13 @@ class LoanPortfolioQuery(graphene.ObjectType):
     )
     loan_portfolio = graphene.Field(LoanPortfolioType, id=graphene.ID(required=True))
 
-    @login_required
+    
     def resolve_loan_portfolios(self, info, status=None):
         if status:
             return client_models.LoanPortfolio.filter(status=status)
 
         return client_models.LoanPortfolio.objects.all()
 
-    @login_required
     def resolve_loan_portfolio(self, info, id):
         return client_models.LoanPortfolio.objects.get(id=id)
 
@@ -53,7 +52,6 @@ class UpdateLoanPortfolioMutation(graphene.Mutation):
 
     portfolio = graphene.Field(LoanPortfolioType)
 
-    @login_required
     def mutate(self, info, portfolio_id, portfolio):
         loan_portfolio = client_models.LoanPortfolio.objects.get(id=portfolio_id)
 
@@ -69,7 +67,6 @@ class AssignPortfolioManagerMutation(graphene.Mutation):
 
     success = graphene.Boolean()
 
-    @login_required
     @superuser_required
     def mutate(self, info, portfolio_id, user_id):
         portfolio = client_models.LoanPortfolio.objects.filter(id=portfolio_id).first()
@@ -90,7 +87,6 @@ class UnAssignPortfolioManagerMutation(graphene.Mutation):
 
     success = graphene.Boolean()
 
-    @login_required
     @superuser_required
     def mutate(self, info, portolio_id, user_id):
         portfolio = client_models.LoanPortfolio.objects.filter(id=portolio_id).first()
@@ -111,7 +107,6 @@ class UpdatePortfolioManagers(graphene.Mutation):
 
     success = graphene.Boolean()
 
-    @login_required
     @superuser_required
     def mutate(self, info, portfolio_id, user_ids):
         portfolio = client_models.LoanPortfolio.objects.get(id=portfolio_id)
