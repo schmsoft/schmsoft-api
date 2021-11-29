@@ -15,6 +15,7 @@ class Query(
     client_schema_owner.OwnerQuery,
     client_loan_portfolio.LoanPortfolioQuery,
     contact_schema_contact_record.ContactRecordQuery,
+    graphene.ObjectType,
 ):
     ...
 
@@ -22,6 +23,8 @@ class Query(
 class Mutation(
     client_loan_portfolio.LoanPortfolioMutation,
     client_schema_business.BusinessMutation,
+    contact_schema_contact_record.ContactMutation,
+    graphene.ObjectType,
 ):
     ...
 
