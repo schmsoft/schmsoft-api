@@ -1,4 +1,4 @@
-#PREREQUISITE
+# PREREQUISITE
 To follow along setting up this app, ensure that you have the following:
 
 <ul>
