@@ -159,6 +159,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+# International phone numbers
+# https://pypi.org/project/django-phonenumber-field/
+
+PHONENUMBER_DB_FORMAT = "E164"
+PHONENUMBER_DEFAULT_REGION = "KE"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -177,3 +182,9 @@ SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 SLACK_NOTIFICATIONS_CHANNEL = os.environ.get(
     "SLACK_NOTIFICATIONS_CHANNEL", "transactions"
 )
+
+# SMS Gateway by Monyera integration
+
+SENDER_ID = "SCHMSOFT"
+MONYERA_USERNAME = os.environ.get("MONYERA_USERNAME")
+MONYERA_PASSWORD = os.environ.get("MONYERA_PASSWORD")
