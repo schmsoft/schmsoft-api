@@ -79,7 +79,7 @@ You should see two containers running, namely.
 <ul>
 
 <li>
-use the following address in your browser `http://localhost:8000`
+Use the following address in your browser `http://localhost:8000`
 </li>
 
 <li>
