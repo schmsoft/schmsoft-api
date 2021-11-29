@@ -8,6 +8,7 @@ from django.core.exceptions import BadRequest
 from contact import models as contact_models
 from integrations.monyera.api import sms as monyera_api_sms
 from contact import api as contact_api
+from client import models as client_models
 
 
 class ContactRecordType(DjangoObjectType):
@@ -19,6 +20,9 @@ class ContactRecordQuery(graphene.ObjectType):
     contact_records = graphene.List(
         ContactRecordType, user_id=graphene.ID(required=True)
     )
+    business_contact_records = graphene.List(
+        ContactRecordType, business_id=graphene.ID(required=True)
+    )
 
     def resolve_contact_records(self, info, user_id):
         qs = auth_models.User.objects.filter(id=user_id)
@@ -27,6 +31,19 @@ class ContactRecordQuery(graphene.ObjectType):
             raise BadRequest("Invalid user id: {}".format(user_id))
 
         return contact_models.ContactRecord.objects.filter(sent_to_id=user_id)
+
+    def resolve_business_contact_records(self, info, business_id):
+        qs = client_models.Business.objects.filter(id=business_id)
+        if not qs.exists():
+            raise BadRequest("Invalid business id: {}.".format(business_id))
+
+        owners = qs.get().owner_set.all()
+
+        users = auth_models.User.objects.filter(owner__in=owners)
+
+        return contact_models.ContactRecord.objects.filter(sent_to__in=users).order_by(
+            "-id"
+        )
 
 
 class SmsToNumbersMutation(graphene.Mutation):
