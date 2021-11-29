@@ -32,3 +32,4 @@ class ContactRecord(TimeStampedModel, models.Model):
     definition_key = models.CharField(max_length=64, db_index=True)
     subject = models.CharField(max_length=256, blank=True)
     text_content = models.TextField()
+    succeeded = models.BooleanField(blank=True, default=True)

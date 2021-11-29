@@ -3,6 +3,7 @@ import requests
 
 from enum import Enum
 from django.conf import settings
+from requests.api import get
 
 
 BASE_URL = "http://desma-api.herokuapp.com/v1/messaging/sms"
@@ -28,26 +29,36 @@ def _monyera_url(endpoint: Endpoints, url_params: list = None):
 
 
 def _auth_headers(token):
-    return {"Authorization": f"Basic {token}"}
+    return {
+        "Authorization": f"Basic {token}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+
+
+def _monyera_options(**kwargs):
+    options = dict(
+        senderId=kwargs.get("sender_id", settings.SENDER_ID),
+        isFlash=kwargs.get("is_flash"),
+        dispatchAt=kwargs.get("dispatch_at"),
+        isUnicode=kwargs.get("is_unicode"),
+    )
+
+    return options
 
 
 def _raise_monyera_error(response):
     ...
 
 
-def send(
-    data: dict,
-):
-    token = get_token(settings.MONYERA_USERNAME, settings.MONYERA_PASSWORD)
+def send(to: str or list, text: str, **kwargs):
+    data = dict(to=to, text=text, options=_monyera_options(**kwargs))
 
-    if "options" in data:
-        data.options["senderId"] = settings.SENDER_ID
-    else:
-        data.update(options=dict(senderId=settings.SENDER_ID))
+    token = get_token(settings.MONYERA_USERNAME, settings.MONYERA_PASSWORD)
 
     response = requests.post(
         _monyera_url(Endpoints.SEND),
-        data=data,
+        json=data,
         headers=_auth_headers(token),
     )
     _raise_monyera_error(response)
