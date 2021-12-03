@@ -30,6 +30,7 @@ urlpatterns = [
     re_path(r"^$", RedirectView.as_view(url="admin/")),
     path("grappelli/", include("grappelli.urls")),  # grappelli URLS
     path("admin/", admin.site.urls),
+    path("integrations/", include("integrations.urls")),
     path(
         "graphql",
         csrf_exempt(

@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "rest_framework",
     "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     "graphene_django",
     "corsheaders",
@@ -173,14 +175,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# SLACK
+# When generating reversed URLs, use HTTPS
+DEFAULT_URL_SCHEME = "https"
+SITE_ID = 1
+
+# Slack
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 SLACK_NOTIFICATIONS_CHANNEL = os.environ.get(
     "SLACK_NOTIFICATIONS_CHANNEL", "transactions"
 )
 
 # SMS Gateway by Monyera integration
-
 SENDER_ID = "SCHMSOFT"
 MONYERA_USERNAME = os.environ.get("MONYERA_USERNAME")
 MONYERA_PASSWORD = os.environ.get("MONYERA_PASSWORD")
+
+# K2 Money
+KOPOKOPO_API_KEY = os.environ.get("KOPOKOPO_API_KEY")
+KOPOKOPO_SECRET = os.environ.get("KOPOKOPO_SECRET")
+KOPOKOPO_CLIENT_ID = os.environ.get("KOPOKOPO_CLIENT_ID")
+KOPOKOPO_BASE_URL = "https://sandbox.kopokopo.com/"

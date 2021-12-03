@@ -28,7 +28,7 @@ def _monyera_url(endpoint: Endpoints, url_params: list = None):
     return url
 
 
-def _auth_headers(token):
+def _headers(token):
     return {
         "Authorization": f"Basic {token}",
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ def send(to: str or list, text: str, **kwargs):
     response = requests.post(
         _monyera_url(Endpoints.SEND),
         json=data,
-        headers=_auth_headers(token),
+        headers=_headers(token),
     )
     _raise_monyera_error(response)
 
